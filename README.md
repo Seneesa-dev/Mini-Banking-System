@@ -205,9 +205,9 @@ Created with ❤️ by [Your Name]
 
 If you have any questions or need help:
 
-- 📧 Email: your.email@example.com
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/vault-banking-system/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/yourusername/vault-banking-system/discussions)
+- 📧 Email: seneesakarunathilaka@gmail.com
+- 🐛 Issues: [GitHub Issues](https://github.com/Seneesa-dev/vault-banking-system/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/Seneesa-dev/vault-banking-system/discussions)
 
 ## ⭐ Show Your Support
 
