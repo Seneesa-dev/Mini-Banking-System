@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vault - Digital Banking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --midnight: #0a1628;
+            --deep-blue: #1a2b4a;
+            --ocean: #2d4a6f;
+            --gold: #d4af37;
+            --gold-light: #e8c968;
+            --silver: #c0c5ce;
+            --white: #ffffff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --surface: #152238;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--midnight) 0%, var(--deep-blue) 50%, var(--ocean) 100%);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(192, 197, 206, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--midnight);
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .login-box {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 0.5rem;
+            letter-spacing: 3px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--silver);
+            font-size: 0.95rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--silver);
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--white);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            border: none;
+            border-radius: 12px;
+            color: var(--midnight);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Dashboard Grid */
+        .dashboard {
+            display: grid;
+            gap: 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Balance Card */
+        .balance-card {
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out 0.1s both;
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .balance-label {
+            font-size: 0.9rem;
+            color: var(--midnight);
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .balance-amount {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--midnight);
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .account-number {
+            font-size: 0.85rem;
+            color: var(--midnight);
+            opacity: 0.7;
+            position: relative;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            animation: slideUp 0.6s ease-out 0.2s both;
+        }
+
+        .action-btn {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-4px);
+            border-color: var(--gold);
+        }
+
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .action-text h3 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .action-text p {
+            font-size: 0.8rem;
+            color: var(--silver);
+        }
+
+        /* Transactions */
+        .transactions-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2rem;
+            animation: slideUp 0.6s ease-out 0.3s both;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .transaction-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(4px);
+        }
+
+        .transaction-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .transaction-icon.credit {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .transaction-icon.debit {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .transaction-details h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .transaction-details p {
+            font-size: 0.8rem;
+            color: var(--silver);
+        }
+
+        .transaction-amount {
+            text-align: right;
+        }
+
+        .transaction-amount .amount {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .transaction-amount .amount.credit {
+            color: var(--success);
+        }
+
+        .transaction-amount .amount.debit {
+            color: var(--danger);
+        }
+
+        .transaction-amount .date {
+            font-size: 0.75rem;
+            color: var(--silver);
+            margin-top: 0.25rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 22, 40, 0.9);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--silver);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            color: var(--white);
+            transform: rotate(90deg);
+        }
+
+        .btn-secondary {
+            padding: 0.9rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: var(--white);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Alert */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .alert.success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .alert.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .alert.warning {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+        }
+
+        /* Security Features */
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--silver);
+        }
+
+        .empty-state svg {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .balance-amount {
+                font-size: 2.5rem;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-box">
+            <div class="login-logo">VAULT</div>
+            <div class="login-subtitle">Secure Digital Banking</div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required autocomplete="current-password">
+                </div>
+                
+                <button type="submit" class="btn-primary">Sign In Securely</button>
+                
+                <div class="security-badge">
+                    🔒 256-bit Encryption
+                </div>
+            </form>
+            
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="font-size: 0.85rem; color: var(--silver); margin-bottom: 1rem;">Demo Accounts:</p>
+                <p style="font-size: 0.8rem; color: var(--silver);">User: john / Pass: demo123</p>
+                <p style="font-size: 0.8rem; color: var(--silver);">User: sarah / Pass: demo123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden">
+        <div class="container">
+            <header>
+                <div class="logo">VAULT</div>
+                <div class="user-info">
+                    <div class="avatar" id="userAvatar">J</div>
+                    <span id="userName">John Doe</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </header>
+
+            <div class="dashboard">
+                <!-- Balance Card -->
+                <div class="balance-card">
+                    <div class="balance-label">Available Balance</div>
+                    <div class="balance-amount" id="balanceAmount">$0.00</div>
+                    <div class="account-number">Account: <span id="accountNumber">****-****-****-0000</span></div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <div class="action-btn" onclick="openModal('transferModal')">
+                        <div class="action-icon">💸</div>
+                        <div class="action-text">
+                            <h3>Transfer</h3>
+                            <p>Send money</p>
+                        </div>
+                    </div>
+                    <div class="action-btn" onclick="openModal('depositModal')">
+                        <div class="action-icon">💰</div>
+                        <div class="action-text">
+                            <h3>Deposit</h3>
+                            <p>Add funds</p>
+                        </div>
+                    </div>
+                    <div class="action-btn" onclick="openModal('withdrawModal')">
+                        <div class="action-icon">🏧</div>
+                        <div class="action-text">
+                            <h3>Withdraw</h3>
+                            <p>Cash out</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions -->
+                <div class="transactions-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Transactions</h2>
+                    </div>
+                    <div id="transactionsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transfer Modal -->
+    <div id="transferModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Transfer Money</h2>
+                <button class="close-btn" onclick="closeModal('transferModal')">×</button>
+            </div>
+            <form id="transferForm">
+                <div class="form-group">
+                    <label for="transferTo">Transfer To</label>
+                    <select id="transferTo" required>
+                        <option value="">Select recipient</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="transferAmount">Amount</label>
+                    <input type="number" id="transferAmount" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="transferNote">Note (optional)</label>
+                    <input type="text" id="transferNote" placeholder="What's this for?">
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('transferModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Transfer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Deposit Funds</h2>
+                <button class="close-btn" onclick="closeModal('depositModal')">×</button>
+            </div>
+            <form id="depositForm">
+                <div class="form-group">
+                    <label for="depositAmount">Amount</label>
+                    <input type="number" id="depositAmount" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="depositSource">Source</label>
+                    <select id="depositSource" required>
+                        <option value="bank">Bank Transfer</option>
+                        <option value="card">Credit/Debit Card</option>
+                        <option value="cash">Cash Deposit</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('depositModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Deposit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div id="withdrawModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Withdraw Funds</h2>
+                <button class="close-btn" onclick="closeModal('withdrawModal')">×</button>
+            </div>
+            <form id="withdrawForm">
+                <div class="form-group">
+                    <label for="withdrawAmount">Amount</label>
+                    <input type="number" id="withdrawAmount" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="withdrawMethod">Withdrawal Method</label>
+                    <select id="withdrawMethod" required>
+                        <option value="atm">ATM Withdrawal</option>
+                        <option value="bank">Bank Transfer</option>
+                        <option value="check">Check</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn-secondary" onclick="closeModal('withdrawModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Withdraw</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Demo banking system with security features
+        const STORAGE_KEY = 'vaultBankingData';
+        
+        // Sample users database
+        const users = {
+            'john': {
+                password: 'demo123',
+                name: 'John Doe',
+                accountNumber: '****-****-****-1234',
+                balance: 15420.50,
+                transactions: [
+                    { type: 'credit', description: 'Salary Deposit', amount: 5000, date: '2026-02-10', from: 'Tech Corp' },
+                    { type: 'debit', description: 'Transfer to Sarah', amount: 200, date: '2026-02-09', to: 'sarah' },
+                    { type: 'credit', description: 'Freelance Payment', amount: 1200, date: '2026-02-08', from: 'Client ABC' },
+                    { type: 'debit', description: 'ATM Withdrawal', amount: 300, date: '2026-02-07' }
+                ]
+            },
+            'sarah': {
+                password: 'demo123',
+                name: 'Sarah Johnson',
+                accountNumber: '****-****-****-5678',
+                balance: 8750.25,
+                transactions: [
+                    { type: 'credit', description: 'Transfer from John', amount: 200, date: '2026-02-09', from: 'john' },
+                    { type: 'debit', description: 'Online Purchase', amount: 89.99, date: '2026-02-08' },
+                    { type: 'credit', description: 'Refund', amount: 45.50, date: '2026-02-07' }
+                ]
+            }
+        };
+
+        let currentUser = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkSession();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('transferForm').addEventListener('submit', handleTransfer);
+            document.getElementById('depositForm').addEventListener('submit', handleDeposit);
+            document.getElementById('withdrawForm').addEventListener('submit', handleWithdraw);
+
+            // Close modal on outside click
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            });
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.toLowerCase().trim();
+            const password = document.getElementById('password').value;
+
+            if (users[username] && users[username].password === password) {
+                currentUser = username;
+                sessionStorage.setItem('currentUser', username);
+                showDashboard();
+            } else {
+                showAlert('error', 'Invalid username or password', 'loginForm');
+            }
+        }
+
+        function checkSession() {
+            const savedUser = sessionStorage.getItem('currentUser');
+            if (savedUser && users[savedUser]) {
+                currentUser = savedUser;
+                showDashboard();
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            
+            const user = users[currentUser];
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userAvatar').textContent = user.name.charAt(0);
+            document.getElementById('accountNumber').textContent = user.accountNumber;
+            updateBalance();
+            renderTransactions();
+            populateTransferDropdown();
+        }
+
+        function updateBalance() {
+            const user = users[currentUser];
+            const balanceElement = document.getElementById('balanceAmount');
+            balanceElement.textContent = `$${user.balance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+        }
+
+        function renderTransactions() {
+            const user = users[currentUser];
+            const container = document.getElementById('transactionsList');
+            
+            if (user.transactions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div>📭</div>
+                        <p>No transactions yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = user.transactions.map(tx => `
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-icon ${tx.type}">
+                            ${tx.type === 'credit' ? '↓' : '↑'}
+                        </div>
+                        <div class="transaction-details">
+                            <h4>${tx.description}</h4>
+                            <p>${tx.from ? `From: ${users[tx.from]?.name || tx.from}` : tx.to ? `To: ${users[tx.to]?.name || tx.to}` : ''}</p>
+                        </div>
+                    </div>
+                    <div class="transaction-amount">
+                        <div class="amount ${tx.type}">
+                            ${tx.type === 'credit' ? '+' : '-'}$${tx.amount.toFixed(2)}
+                        </div>
+                        <div class="date">${formatDate(tx.date)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function populateTransferDropdown() {
+            const select = document.getElementById('transferTo');
+            select.innerHTML = '<option value="">Select recipient</option>';
+            
+            Object.keys(users).forEach(username => {
+                if (username !== currentUser) {
+                    select.innerHTML += `<option value="${username}">${users[username].name}</option>`;
+                }
+            });
+        }
+
+        function handleTransfer(e) {
+            e.preventDefault();
+            const to = document.getElementById('transferTo').value;
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+            const note = document.getElementById('transferNote').value || 'Transfer';
+            
+            const user = users[currentUser];
+            
+            if (amount <= 0) {
+                showAlert('error', 'Invalid amount', 'transferForm');
+                return;
+            }
+            
+            if (amount > user.balance) {
+                showAlert('error', 'Insufficient funds', 'transferForm');
+                return;
+            }
+
+            // Deduct from sender
+            user.balance -= amount;
+            user.transactions.unshift({
+                type: 'debit',
+                description: note,
+                amount: amount,
+                date: new Date().toISOString().split('T')[0],
+                to: to
+            });
+
+            // Add to recipient
+            users[to].balance += amount;
+            users[to].transactions.unshift({
+                type: 'credit',
+                description: note,
+                amount: amount,
+                date: new Date().toISOString().split('T')[0],
+                from: currentUser
+            });
+
+            updateBalance();
+            renderTransactions();
+            closeModal('transferModal');
+            showAlert('success', `Successfully transferred $${amount.toFixed(2)} to ${users[to].name}`);
+            e.target.reset();
+        }
+
+        function handleDeposit(e) {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            const source = document.getElementById('depositSource').value;
+            
+            if (amount <= 0) {
+                showAlert('error', 'Invalid amount', 'depositForm');
+                return;
+            }
+
+            const user = users[currentUser];
+            user.balance += amount;
+            user.transactions.unshift({
+                type: 'credit',
+                description: `Deposit via ${source}`,
+                amount: amount,
+                date: new Date().toISOString().split('T')[0]
+            });
+
+            updateBalance();
+            renderTransactions();
+            closeModal('depositModal');
+            showAlert('success', `Successfully deposited $${amount.toFixed(2)}`);
+            e.target.reset();
+        }
+
+        function handleWithdraw(e) {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const method = document.getElementById('withdrawMethod').value;
+            
+            const user = users[currentUser];
+            
+            if (amount <= 0) {
+                showAlert('error', 'Invalid amount', 'withdrawForm');
+                return;
+            }
+            
+            if (amount > user.balance) {
+                showAlert('error', 'Insufficient funds', 'withdrawForm');
+                return;
+            }
+
+            user.balance -= amount;
+            user.transactions.unshift({
+                type: 'debit',
+                description: `Withdrawal via ${method}`,
+                amount: amount,
+                date: new Date().toISOString().split('T')[0]
+            });
+
+            updateBalance();
+            renderTransactions();
+            closeModal('withdrawModal');
+            showAlert('success', `Successfully withdrew $${amount.toFixed(2)}`);
+            e.target.reset();
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function logout() {
+            sessionStorage.removeItem('currentUser');
+            currentUser = null;
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('loginForm').reset();
+        }
+
+        function showAlert(type, message, formId = null) {
+            const alert = document.createElement('div');
+            alert.className = `alert ${type}`;
+            alert.textContent = message;
+            
+            if (formId) {
+                const form = document.getElementById(formId);
+                form.insertBefore(alert, form.firstChild);
+            } else {
+                const container = document.querySelector('.container');
+                container.insertBefore(alert, container.firstChild);
+            }
+
+            setTimeout(() => alert.remove(), 4000);
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            if (date.toDateString() === today.toDateString()) return 'Today';
+            if (date.toDateString() === yesterday.toDateString()) return 'Yesterday';
+            
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+    </script>
+</body>
+</html>
